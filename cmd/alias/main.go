@@ -7,7 +7,7 @@ import (
 
 func main(){
 	if len(os.Args) < 2{
-		fmt.Fprintln(os.Stderr, "Usage: alias <add> ")
+		fmt.Fprintln(os.Stderr, "Usage: alias <add/list> ")
 		os.Exit(1)
 	}
 
@@ -24,6 +24,12 @@ func main(){
 			os.Exit(1)
 		}
 		fmt.Println("Alias added successfully")
+	case "list":
+		err := ListAliases()
+		if err != nil{
+			fmt.Fprintln(os.Stderr, "Error listing aliases:", err)
+			os.Exit(1)
+		}
 	default:
 		fmt.Fprintln(os.Stderr, "Usage: alias <command>")
 		os.Exit(1)

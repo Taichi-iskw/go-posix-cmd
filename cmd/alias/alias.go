@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -34,4 +35,23 @@ func AddAlias(name, command string) error {
 		return err
 	}
 	return os.WriteFile(aliasFile, newData, 0644)
+}
+
+func ListAliases() error {
+	data, err := os.ReadFile(aliasFile)
+	if os.IsNotExist(err){
+		fmt.Println("No aliases found")	
+		return nil
+	}
+	if err != nil{
+		return err
+	}
+	var aliases map[string]string
+	if err := json.Unmarshal(data, &aliases); err != nil{
+		return err
+	}
+	for alias, command := range aliases{
+		fmt.Printf("%s -> %s\n", alias, command)
+	}
+	return nil
 }
